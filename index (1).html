@@ -1,0 +1,101 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AIESEC Auckland | Semester dashboard</title><style>
+:root{font-family:Inter,Segoe UI,Arial,sans-serif;color:#14233e;background:#f5f7fb}*{box-sizing:border-box}body{margin:0}.wrap{max-width:1240px;margin:auto;padding:36px 28px}header{display:flex;justify-content:space-between;gap:20px;align-items:start}h1{margin:7px 0;font-size:32px;letter-spacing:-.8px}.eyebrow{font-size:12px;letter-spacing:2px;color:#1769aa;font-weight:800}.muted{color:#657389;font-size:14px}.date{background:#e6f1fb;color:#18598c;border-radius:12px;padding:12px 16px;font-weight:700;
+white-space:nowrap}.cards{display:grid;grid-template-columns:repeat(4,1fr);
+gap:16px;margin:24px 0}.card,.panel{background:white;border:1px solid #e2eaf2;border-radius:18px;box-shadow:0 4px 18px #19345b0a}.card{padding:22px}.card b{display:block;font-size:32px;margin:10px 0 2px}.card small{color:#64738b}.label{font-weight:700;font-size:13px;color:#486078}.grid{display:grid;grid-template-columns:1.5fr 1fr;gap:18px}.panel{padding:24px;margin-bottom:18px}h2{font-size:19px;margin:0 0 8px}.toolbar{display:flex;align-items:center;
+justify-content:space-between;gap:12px;margin-bottom:18px}select{border:1px solid #cddbe9;
+border-radius:9px;padding:9px 12px;background:white;color:#14233e;font:inherit}.row{display:grid;grid-template-columns:205px 1fr 56px;
+align-items:center;gap:12px;margin:14px 0;font-size:13px}.bar{height:13px;border-radius:12px;background:#e9eff6;overflow:hidden}.fill{height:100%;background:#1774b9;border-radius:12px}.row em{font-style:normal;text-align:right;font-weight:700}.pipeline{display:grid;gap:13px;margin-top:20px}.pipe{display:flex;justify-content:space-between;
+background:#eef6fc;border-left:5px solid #1882ba;border-radius:6px;
+padding:12px 14px;font-size:14px}.pipe b{font-size:19px}table{width:100%;border-collapse:collapse;font-size:13px}th{text-align:left;color:#6d7e93;font-size:11px;text-transform:uppercase;
+letter-spacing:.5px}td,th{padding:11px 8px;border-bottom:1px solid #edf1f6}td.num{text-align:right;font-variant-numeric:tabular-nums}th.num{text-align:right}.pill{border-radius:20px;
+padding:4px 9px;font-weight:700;font-size:11px;background:#ffe7e2;color:#a53927}.ok{background:#e5f6eb;color:#257444}.note{line-height:1.55;background:#fff8e7;border:1px solid #f4e0a6;
+padding:16px;border-radius:12px;margin-top:8px;font-size:13px}@media(max-width:850px){.cards{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}.row{grid-template-columns:150px 1fr 42px}header{display:block}.date{display:inline-block;margin-top:12px}}@media(max-width:500px){.cards{grid-template-columns:1fr 1fr}.card{padding:15px}.card b{font-size:25px}.wrap{padding:22px 12px}.panel{padding:16px}table{font-size:11px}td,th{padding:7px 3px}.row{grid-template-columns:115px 1fr 38px;font-size:11px}}
+</style><style>.controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:20px 0}.btn{background:#1769aa;color:white;border:0;border-radius:10px;padding:11px 16px;font:inherit;font-weight:700;cursor:pointer}.btn:disabled{opacity:.45;cursor:default}.file{position:absolute;width:1px;height:1px;opacity:0}.status{font-size:13px;color:#4e6077}.error{color:#a53927}.good{color:#257444}</style><body><div class="wrap"><header><div><div class="eyebrow">
+    AIESEC IN AUCKLAND CITY
+</div><h1>Semester performance</h1>
+    <div class="muted">Goals, current totals, and the pace needed to reach them</div>
+</div><div class="date" id="asof">Snapshot · 27 Sep 2026</div></header>
+<div class="controls"><label class="btn" for="workbook">Choose updated Excel or CSV</label><input class="file" id="workbook" type="file" accept=".xlsx,.csv"><button class="btn" id="refresh" disabled>Refresh selected file</button><span class="status" id="sourceStatus">Showing the supplied snapshot. Choose your updated workbook to load its current numbers.</span></div><div class="cards"><div class="card">
+    <span class="label">Exchanges completed</span>
+    <b id="exchanges">0 <small>/ 2</small></b>
+    <small>Outgoing Exchange goal</small></div>
+    <div class="card"><span class="label">Applications applied</span><b id="applications">1 <small>/ 27</small></b><small id="applicationsCaption">Goal progress</small></div><div class="card">
+        <span class="label">EWA leads</span><b id="leads">54 <small>/ 250</small>
+        </b><small>22% of goal</small></div><div class="card">
+            <span class="label">IG followers</span><b id="followers">887 <small>/ 1,000</small>
+            </b><small>89% of goal</small></div></div><div class="grid">
+                <section class="panel"><div class="toolbar"><div>
+                    <h2>Progress toward goals</h2>
+                    <div class="muted">Each bar is actual ÷ target. The benchmark follows the workbook dates.</div>
+                </div><select id="filter" aria-label="Filter function"><option>All functions</option>
+                    <option>Outgoing Exchange</option>
+                    <option>Marketing</option>
+                    <option>Engage with AIESEC</option>
+                </select></div><div id="bars"></div>
+            </section><section class="panel">
+                <h2>Outgoing Exchange activity</h2>
+                <div class="muted">Current counts along the journey</div>
+                <div class="pipeline" id="pipeline"></div>
+                <p class="muted">Counts can include different people and periods; they are not conversion rates.</p>
+            </section></div><section class="panel">
+                <h2>What is needed now</h2>
+                <p class="muted">Remaining goal and average per week until the semester end date.</p>
+                <div style="overflow:auto"><table><thead><tr><th>Function</th><th>KPI</th>
+                    <th class="num">Actual</th><th class="num">Target</th><th class="num">Remaining</th>
+                    <th class="num">Per week</th><th>Status</th></tr></thead><tbody id="table"></tbody></table></div></section><div class="note"><b>Data note.</b> This dashboard reads KPI Goal Tracker totals from the workbook you choose. Save Excel changes and choose the file again. Daily logs are incomplete. The supplied snapshot calls the 500 goal TikTok followers, while the original workbook calls it TikTok posts per week; confirm this metric before using it.</div>
+                    </div><script>
+let rows=[{"Function": "Outgoing Exchange", "Metric": "Exchanges Completed", "Target": 1, "Actual": 0, "Remaining": 1, "Completion": 0.0, "WeeklyNeeded": 0.2}, {"Function": "Outgoing Exchange", "Metric": "Applications Approved", "Target": 5, "Actual": 0, "Remaining": 5, "Completion": 0.0, "WeeklyNeeded": 1.0}, {"Function": "Outgoing Exchange", "Metric": "Applications Applied", "Target": 7, "Actual": 1, "Remaining": 6, "Completion": 0.14285714285714285, "WeeklyNeeded": 1.2}, {"Function": "Outgoing Exchange", "Metric": "Consultation Chats", "Target": 81, "Actual": 16, "Remaining": 65, "Completion": 0.19753086419753085, "WeeklyNeeded": 13.0}, {"Function": "Outgoing Exchange", "Metric": "Cold Mails/Calls Sent", "Target": 250, "Actual": 61, "Remaining": 189, "Completion": 0.244, "WeeklyNeeded": 37.8}, {"Function": "Outgoing Exchange", "Metric": "# IR Calls", "Target": 45, "Actual": 16, "Remaining": 29, "Completion": 0.35555555555555557, "WeeklyNeeded": 5.8}, {"Function": "Marketing", "Metric": "IG Followers (Goal)", "Target": 1000, "Actual": 885, "Remaining": 115, "Completion": 0.885, "WeeklyNeeded": 23.0}, {"Function": "Marketing", "Metric": "Tiktok Followers (Goal)", "Target": 500, "Actual": 54, "Remaining": 446, "Completion": 0.108, "WeeklyNeeded": 89.2}, {"Function": "Engage with AIESEC", "Metric": "# Leads", "Target": 250, "Actual": 54, "Remaining": 196, "Completion": 0.216, "WeeklyNeeded": 39.2}, {"Function": "Engage with AIESEC", "Metric": "# Event Plannings", "Target": 4, "Actual": 2, "Remaining": 2, "Completion": 0.5, "WeeklyNeeded": 0.4}, {"Function": "Engage with AIESEC", "Metric": "# of Partnerships", "Target": 10, "Actual": 2, "Remaining": 8, "Completion": 0.2, "WeeklyNeeded": 1.6}, {"Function": "Engage with AIESEC", "Metric": "Cold Emails (Partnership)", "Target": 34, "Actual": 28, "Remaining": 6, "Completion": 0.8235294117647058, "WeeklyNeeded": 1.2}];
+let elapsed=.62, weeksLeft=5, currentFile=null;
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pct=n=>Math.round(n*100)+'%';
+const lookup=n=>rows.find(r=>r.Metric===n);
+function draw(){
+ const selected=$('filter').value;
+ const x=rows.filter(r=>selected==='All functions'||r.Function===selected);
+ $('bars').innerHTML=x.map(r=>'<div class="row"><span>'+esc(r.Metric)+'</span><div class="bar"><div class="fill" style="width:'+Math.min(100,r.Completion*100)+'%;background:'+(r.Completion>=elapsed?'#24a36a':'#df715d')+'"></div></div><em>'+pct(r.Completion)+'</em></div>').join('');
+ $('table').innerHTML=x.map(r=>'<tr><td>'+esc(r.Function)+'</td><td>'+esc(r.Metric)+'</td><td class="num">'+r.Actual+'</td><td class="num">'+r.Target+'</td><td class="num">'+r.Remaining+'</td><td class="num">'+r.WeeklyNeeded+'</td><td><span class="pill '+(r.Completion>=elapsed?'ok':'')+'">'+(r.Completion>=elapsed?'Ahead':'Behind')+'</span></td></tr>').join('');
+ for(const [id,name] of [['exchanges','Exchanges Completed'],['applications','Applications Applied'],['leads','# Leads'],['followers','IG Followers (Goal)']]){let r=lookup(name);$(id).innerHTML=r?`${r.Actual.toLocaleString()} <small>/ ${r.Target.toLocaleString()}</small>`:'—'}
+ $('applicationsCaption').textContent=pct(lookup('Applications Applied').Completion)+' of goal';
+ const order=['Cold Mails/Calls Sent','Consultation Chats','Applications Applied','Applications Approved','Exchanges Completed'];
+ $('pipeline').innerHTML=order.map(n=>{let r=lookup(n);return '<div class="pipe"><span>'+esc(n)+'</span><b>'+(r?r.Actual:'—')+'</b></div>'}).join('');
+}
+$('filter').addEventListener('change',draw);draw();
+function value(cell){if(!cell)return null;let t=cell.getAttribute('t');let v=cell.getElementsByTagName('v')[0];if(t==='inlineStr')return cell.textContent.trim();if(!v)return null;return t==='s'?shared[Number(v.textContent)]:t==='str'?v.textContent:Number(v.textContent)}
+let shared=[];
+async function unzip(buffer){
+ let b=new DataView(buffer),bytes=new Uint8Array(buffer),end=-1;
+ for(let i=b.byteLength-22;i>=Math.max(0,b.byteLength-65557);i--){if(b.getUint32(i,true)===0x06054b50){end=i;break}}
+ if(end<0)throw Error('This is not a valid .xlsx workbook.');
+ let count=b.getUint16(end+10,true),pos=b.getUint32(end+16,true),files={};
+ for(let j=0;j<count;j++){
+  if(b.getUint32(pos,true)!==0x02014b50)throw Error('Invalid Excel archive.');
+  let method=b.getUint16(pos+10,true),size=b.getUint32(pos+20,true),nl=b.getUint16(pos+28,true),ex=b.getUint16(pos+30,true),co=b.getUint16(pos+32,true),offset=b.getUint32(pos+42,true),name=new TextDecoder().decode(bytes.slice(pos+46,pos+46+nl));
+  let start=offset+30+b.getUint16(offset+26,true)+b.getUint16(offset+28,true),compressed=bytes.slice(start,start+size);
+  files[name]=async()=>{if(method===0)return compressed;if(method!==8)throw Error('Unsupported workbook compression.');let stream=new Blob([compressed]).stream().pipeThrough(new DecompressionStream('deflate-raw'));return new Uint8Array(await new Response(stream).arrayBuffer())};
+  pos+=46+nl+ex+co;
+ }
+ return files;
+}
+const xml=bytes=>new DOMParser().parseFromString(new TextDecoder().decode(bytes),'application/xml');
+async function readExcel(file){
+ const files=await unzip(await file.arrayBuffer());
+ if(!files['xl/workbook.xml']||!files['xl/_rels/workbook.xml.rels'])throw Error('Workbook structure is missing.');
+ let wb=xml(await files['xl/workbook.xml']()) ,rels=xml(await files['xl/_rels/workbook.xml.rels']());
+ let sheet=[...wb.getElementsByTagName('sheet')].find(e=>e.getAttribute('name')==='KPI Goal Tracker');if(!sheet)throw Error('Could not find the “KPI Goal Tracker” sheet.');
+ let rid=sheet.getAttribute('r:id')||sheet.getAttributeNS('http://schemas.openxmlformats.org/officeDocument/2006/relationships','id');
+ let rel=[...rels.getElementsByTagName('Relationship')].find(e=>e.getAttribute('Id')===rid);if(!rel)throw Error('Could not locate the tracker sheet.');
+ let path=rel.getAttribute('Target');path=path.startsWith('/')?path.slice(1):'xl/'+path.replace(/^\.\//,'');path=path.replace('xl/xl/','xl/');
+ if(!files[path])throw Error('Tracker sheet XML is missing.');
+ shared=[];if(files['xl/sharedStrings.xml']){let ss=xml(await files['xl/sharedStrings.xml']());shared=[...ss.getElementsByTagName('si')].map(n=>[...n.getElementsByTagName('t')].map(t=>t.textContent).join(''))}
+ let doc=xml(await files[path]()),cells={};for(let c of doc.getElementsByTagName('c'))cells[c.getAttribute('r')]=value(c);
+ let map=[['Outgoing Exchange',[8,9,10,11,12,13]],['Marketing',[21,22]],['Engage with AIESEC',[28,29,30,31]]],updated=[];
+ for(const [fn,rs] of map)for(const n of rs){let old=rows.find(r=>r.Function===fn&&r.Metric===({8:'Exchanges Completed',9:'Applications Approved',10:'Applications Applied',11:'Consultation Chats',12:'Cold Mails/Calls Sent',13:'# IR Calls',21:'IG Followers (Goal)',22:'Tiktok Followers (Goal)',28:'# Leads',29:'# Event Plannings',30:'# of Partnerships',31:'Cold Emails (Partnership)'}[n]));let target=Number(cells['C'+n]),actual=Number(cells['D'+n]);if(n===22&&(cells['D'+n]===null||cells['D'+n]===undefined))continue;if(!Number.isFinite(target)||target<=0||!Number.isFinite(actual))throw Error('Invalid or blank target/current total in tracker row '+n+'.');let remaining=Math.max(0,target-actual);updated.push({Function:fn,Metric:old.Metric,Target:target,Actual:actual,Remaining:remaining,Completion:actual/target,WeeklyNeeded:Math.round(remaining/weeksLeft*10)/10})}
+ let asof=Number(cells.H3),start=Number(cells.D3),end=Number(cells.F3);
+ if(Number.isFinite(asof)&&Number.isFinite(start)&&Number.isFinite(end)&&end>start){elapsed=Math.min(1,Math.max(0,(asof-start)/(end-start)));weeksLeft=Math.max(1,Math.ceil((end-asof)/7));for(let r of updated)r.WeeklyNeeded=Math.round(r.Remaining/weeksLeft*10)/10;let day=new Date(Date.UTC(1899,11,30)+asof*86400000);$('asof').textContent='Workbook date · '+day.toLocaleDateString('en-NZ',{day:'numeric',month:'short',year:'numeric',timeZone:'UTC'})}
+ return updated;
+}
+function readCSV(file){return file.text().then(text=>{let lines=text.replace(/^\uFEFF/,'').trim().split(/\r?\n/),header=lines.shift().split(',');let data=lines.map(l=>{let parts=l.split(','),o={};header.forEach((h,i)=>o[h]=parts[i]);let target=Number(o.Target),actual=Number(o.Actual);if(!Number.isFinite(target)||target<=0||!Number.isFinite(actual))throw Error('Invalid CSV numbers.');return {Function:o.Function,Metric:o.Metric,Target:target,Actual:actual,Remaining:Math.max(0,target-actual),Completion:actual/target,WeeklyNeeded:Math.round(Math.max(0,target-actual)/weeksLeft*10)/10}});if(data.length<5)throw Error('CSV appears incomplete.');return data})}
+async function load(file){if(!file)return;try{$('sourceStatus').textContent='Reading '+file.name+'…';let updated=file.name.toLowerCase().endsWith('.xlsx')?await readExcel(file):await readCSV(file);rows=updated;currentFile=file;$('refresh').disabled=false;draw();$('sourceStatus').className='status good';$('sourceStatus').textContent='Updated from '+file.name+' · '+new Date().toLocaleTimeString('en-NZ')+'. Select the file again after saving new Excel changes.'}catch(e){$('sourceStatus').className='status error';$('sourceStatus').textContent='Could not update: '+e.message;console.error(e)}}
+$('workbook').addEventListener('change',e=>load(e.target.files[0]));$('refresh').addEventListener('click',()=>load(currentFile));
+</script></body></html>
