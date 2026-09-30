@@ -14,7 +14,7 @@ padding:16px;border-radius:12px;margin-top:8px;font-size:13px}@media(max-width:8
     AIESEC IN AUCKLAND CITY
 </div><h1>Semester performance</h1>
     <div class="muted">Goals, current totals, and the pace needed to reach them</div>
-</div><div class="date" id="asof">Snapshot · 27 Sep 2026</div></header>
+</div></header>
 <div class="controls"><label class="btn" for="workbook">Choose updated Excel or CSV</label><input class="file" id="workbook" type="file" accept=".xlsx,.csv"><button class="btn" id="refresh" disabled>Refresh selected file</button><span class="status" id="sourceStatus">Showing the supplied snapshot. Choose your updated workbook to load its current numbers.</span></div><div class="cards"><div class="card">
     <span class="label">Exchanges completed</span>
     <b id="exchanges">0 <small>/ 2</small></b>
@@ -22,7 +22,7 @@ padding:16px;border-radius:12px;margin-top:8px;font-size:13px}@media(max-width:8
     <div class="card"><span class="label">Applications applied</span><b id="applications">1 <small>/ 27</small></b><small id="applicationsCaption">Goal progress</small></div><div class="card">
         <span class="label">EWA leads</span><b id="leads">54 <small>/ 250</small>
         </b><small>22% of goal</small></div><div class="card">
-            <span class="label">IG followers</span><b id="followers">887 <small>/ 1,000</small>
+            <span class="label">IG followers</span><b id="followers">885 <small>/ 1,000</small>
             </b><small>89% of goal</small></div></div><div class="grid">
                 <section class="panel"><div class="toolbar"><div>
                     <h2>Progress toward goals</h2>
@@ -92,7 +92,7 @@ async function readExcel(file){
  let map=[['Outgoing Exchange',[8,9,10,11,12,13]],['Marketing',[21,22]],['Engage with AIESEC',[28,29,30,31]]],updated=[];
  for(const [fn,rs] of map)for(const n of rs){let old=rows.find(r=>r.Function===fn&&r.Metric===({8:'Exchanges Completed',9:'Applications Approved',10:'Applications Applied',11:'Consultation Chats',12:'Cold Mails/Calls Sent',13:'# IR Calls',21:'IG Followers (Goal)',22:'Tiktok Followers (Goal)',28:'# Leads',29:'# Event Plannings',30:'# of Partnerships',31:'Cold Emails (Partnership)'}[n]));let target=Number(cells['C'+n]),actual=Number(cells['D'+n]);if(n===22&&(cells['D'+n]===null||cells['D'+n]===undefined))continue;if(!Number.isFinite(target)||target<=0||!Number.isFinite(actual))throw Error('Invalid or blank target/current total in tracker row '+n+'.');let remaining=Math.max(0,target-actual);updated.push({Function:fn,Metric:old.Metric,Target:target,Actual:actual,Remaining:remaining,Completion:actual/target,WeeklyNeeded:Math.round(remaining/weeksLeft*10)/10})}
  let asof=Number(cells.H3),start=Number(cells.D3),end=Number(cells.F3);
- if(Number.isFinite(asof)&&Number.isFinite(start)&&Number.isFinite(end)&&end>start){elapsed=Math.min(1,Math.max(0,(asof-start)/(end-start)));weeksLeft=Math.max(1,Math.ceil((end-asof)/7));for(let r of updated)r.WeeklyNeeded=Math.round(r.Remaining/weeksLeft*10)/10;let day=new Date(Date.UTC(1899,11,30)+asof*86400000);$('asof').textContent='Workbook date · '+day.toLocaleDateString('en-NZ',{day:'numeric',month:'short',year:'numeric',timeZone:'UTC'})}
+ if(Number.isFinite(asof)&&Number.isFinite(start)&&Number.isFinite(end)&&end>start){elapsed=Math.min(1,Math.max(0,(asof-start)/(end-start)));weeksLeft=Math.max(1,Math.ceil((end-asof)/7));for(let r of updated)r.WeeklyNeeded=Math.round(r.Remaining/weeksLeft*10)/10}
  return updated;
 }
 function readCSV(file){return file.text().then(text=>{let lines=text.replace(/^\uFEFF/,'').trim().split(/\r?\n/),header=lines.shift().split(',');let data=lines.map(l=>{let parts=l.split(','),o={};header.forEach((h,i)=>o[h]=parts[i]);let target=Number(o.Target),actual=Number(o.Actual);if(!Number.isFinite(target)||target<=0||!Number.isFinite(actual))throw Error('Invalid CSV numbers.');return {Function:o.Function,Metric:o.Metric,Target:target,Actual:actual,Remaining:Math.max(0,target-actual),Completion:actual/target,WeeklyNeeded:Math.round(Math.max(0,target-actual)/weeksLeft*10)/10}});if(data.length<5)throw Error('CSV appears incomplete.');return data})}
